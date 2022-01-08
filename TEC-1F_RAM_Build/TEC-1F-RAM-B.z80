@@ -1,0 +1,55 @@
+; *************************************************************************
+;
+;       MINT Minimal Interpreter for the Z80 
+;
+;       Ken Boak, John Hardy and Craig Jones. 
+;
+;       GNU GENERAL PUBLIC LICENSE                   Version 3, 29 June 2007
+;
+;       see the LICENSE file in this repo for more information 
+;
+; *****************************************************************************
+
+; Tec-1F RAM build 
+
+PGMSTART    EQU $2000
+RAMSTART    EQU $3800
+
+; TEC-1 I/O port addresses
+
+KEYBUF:      .EQU 00H             ;MM74C923N keyboard encoder
+SCAN:        .EQU 01H             ;display scan latch
+DISPLY:      .EQU 02H             ;display latch
+PORT3:       .EQU 03H             ;ST3 (8X8), STROBE (Relay Board) DATLATCH (DAT board)
+PORT4:       .EQU 04H             ;ST4 (8X8), LCD 'E' (Dat board)
+PORT5:       .EQU 05H
+PORT6:       .EQU 06H
+PORT7:       .EQU 07H
+
+        .ORG PGMSTART
+
+        LD HL,RxChar
+        LD (GETCVEC),HL
+        LD HL,TxChar
+        LD (PUTCVEC),HL
+
+        call  InitialiseSerial
+
+        jp   start
+
+getchar:
+        LD HL,(GETCVEC)
+        JP (HL)
+        
+putchar:
+        PUSH HL
+        LD HL,(PUTCVEC)
+        EX (SP),HL
+        RET
+
+.include "BitBangSerial.asm"
+;.include "Char-6850.asm"
+;.include "RC2014-6850.asm"
+
+.include "MINT.asm"
+.include "ram.asm"

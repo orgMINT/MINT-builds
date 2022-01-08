@@ -1,0 +1,59 @@
+; *************************************************************************
+;
+;       MINT Minimal Interpreter for the Z80 
+;
+;       Ken Boak, John Hardy and Craig Jones. 
+;
+;       GNU GENERAL PUBLIC LICENSE                   Version 3, 29 June 2007
+;
+;       see the LICENSE file in this repo for more information 
+;
+; *****************************************************************************
+
+; Southern Cross RAM build 
+
+PGMSTART    EQU $2000
+RAMSTART    EQU $2800
+
+; SC I/O port addresses
+IO0:         .equ 80H             ;IO port 0
+IO1:         .equ 81H             ;IO port 1
+IO2:         .EQU 82H             ;IO port 2
+IO3:         .EQU 83H             ;IO port 3
+DISPLY:      .EQU 84H             ;display latch
+SCAN:        .EQU 85H             ;display scan latch
+KEYBUF:      .EQU 86H             ;keyboard buffer
+IO7:         .EQU 87H             ;toggle single stepper (if fitted)
+
+        .ORG PGMSTART
+
+        LD HL,RxChar
+        LD (GETCVEC),HL
+        LD HL,TxChar
+        LD (PUTCVEC),HL
+
+        call  InitialiseSerial
+
+        jp   start
+
+getchar:
+        LD HL,(GETCVEC)
+        JP (HL)
+        
+putchar:
+        PUSH HL
+        LD HL,(PUTCVEC)
+        EX (SP),HL
+        RET
+
+;serial port
+.include "BitBangSerial.asm"
+;.include "Char-6850.asm"
+;.include "RC2014-6850.asm"
+
+;Intel Hex File Load
+;.include "IntelHexLoader.asm"
+
+;MINT
+.include "MINT.asm"
+.include "ram.asm"
