@@ -1,5 +1,5 @@
 # MINT-builds
-A repository of MINT builds targetting different platforms
+A repository of [MINT](https://github.com/orgMINT/MINT) builds targetting different platforms
 
 Included are ROM images for
 
