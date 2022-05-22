@@ -1,4 +1,4 @@
-# MINT for the  TEC-1 
+# MINT 1.1 for the  TEC-1 
 
 
 
@@ -21,7 +21,7 @@ TEC-1-ROM-B.lst        Intel Hex File
 Nibble to seven segment codes are built into the ROM, to get the 7 segment code
 pass the nibble to the code at address #0058 and the equivalent seven segment code will be returned  on the stack. 
 
-#0C  #0058 \X
+#0C  #0058 \\#0 
 
 #0C  = nibble to be converted
 
@@ -31,13 +31,13 @@ pass the nibble to the code at address #0058 and the equivalent seven segment co
 
 The Mint ROM has a built in Intel Hex downloader that you can execute like this;
 
-#000D \X
+#000D \\#0
 
 The code returns a 1 for a checksum error or 0 for success.
 
 The following Mint code definitions provides a more user friendly wrapper;
 
-:D `Download Intel Hex file\NSend File...\N` #000D \X;
+:D `Download Intel Hex file\NSend File...\N` #000D \\#0 ;
 
 :L 0=(`Hex load OK`)(`Checksum Fail`);
 

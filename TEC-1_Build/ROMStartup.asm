@@ -57,14 +57,18 @@ RSTVEC:
     	PUSH	HL
     	LD	HL,(INTVEC)
     	JP	(HL)
-        RETI
 
 ;RST 8  Non Maskable Interrupt
         .ORG ROMSTART+$66
-        PUSH	HL
-        LD	HL,(NMIVEC)
-        JP	(HL)
-
+         PUSH   AF
+         IN     A,(KEYBUF)
+         LD     (KEYIN),A
+;
+         LD     A,(KEYCNT)
+         INC    A
+         LD     (KEYCNT),A
+         POP    AF
+         RETN
 RESET:   
         ld SP,stack
         LD HL,IntRet
@@ -75,4 +79,3 @@ RESET:
     	LD (RST28),HL
     	LD (RST30),HL
         LD (INTVEC),HL
-        LD (NMIVEC),HL
